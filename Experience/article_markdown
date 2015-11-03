@@ -1,0 +1,12 @@
+#使用Markdown编写文章
+2015-09-14  
+  
+&nbsp;&nbsp;&nbsp;这是我使用Markdown写的第二篇文章，使用Markdown编写文章的总体感受就是方便，使用Markdown写好文章后使用命令行工具**`markdown`**将Markdown格式的文本装换为HTML格式，之后稍作修改就可以直接放到网站上了，效率提高了不少;其次是文件所占容量小了很多，以前使用LibreOffice来写，文件基本都在35K以上;现在直接使用Vim来写就可以了，而且文件大小不会超过5K。   
+在Ubuntu中安装**`markdown`**如下:  
+**`$ sudo apt-get update`**  
+**`$ sudo apt-get install markdown -y`**  
+安装完毕后就可以按照`$ markdown markdown_file html_file`的格式来将Markdown格式的文本装换为HTML格式的文本了。  
+  
+&nbsp;&nbsp;&nbsp;在写完Markdown文本后，一般我会在本地测试一下Markdown文件的语法是否正确，为了方便转换及测试Markdown文本，我写了一个shell脚本，已经放到GitHub上了，感兴趣的话可以点击[这里](https://github.com/renyuntao/markdown_to_html)查看.  <br /><br /><br />
+一如既往，如果你对文章中的内容有任何疑问，或者是发现文章中有任何错误，都可以通过下面的地址发邮件告诉我.  
+E-mail: rytubuntulinux@gmail.com

@@ -1,0 +1,43 @@
+#Ubuntu:如何使用命令行来卸载软件?
+2015-10-02 <br />  
+&nbsp;&nbsp;&nbsp;在Ubuntu中，如果你是从软件中心安装的软件，当你不需要该软件时，可以直接从软件搜索到该软件，然后点击"卸载"按钮来卸载该软件，不过本文中将讨论如何使用命令行来卸载软件。   
+通过命令行来卸载一个软件，首先需要知道该软件的软件包的确切名称，如果你不知道想要卸载的软件的软件包的确切名称，可以执行如下命令来查看你的电脑中所有软件的软件包名称:  
+
+    $ dpkg --list
+    期望状态=未知(u)/安装(i)/删除(r)/清除(p)/保持(h)
+    | 状态=未安装(n)/已安装(i)/仅存配置(c)/仅解压缩(U)/配置失败(F)/不完全安装(H)/触发器等待(W)/触发器未决(T)
+    |/ 错误?=(无)/须重装(R) (状态，错误：大写=故障)
+    ||/ 名称                                                        版本                                                体系结构：   描述
+    +++-===========================================================-===================================================-============-======================
+    ii  account-plugin-aim                                          3.8.6-0ubuntu9.2                                    i386         Messaging account plugin for AIM
+    ii  account-plugin-facebook                                     0.11+14.04.20140409.1-0ubuntu2                      all          GNOME Control Center account plugin for single signon - facebook
+    ii  account-plugin-flickr                                       0.11+14.04.20140409.1-0ubuntu2                      all          GNOME Control Center account plugin for single signon - flickr
+    ii  account-plugin-google                                       0.11+14.04.20140409.1-0ubuntu2                      all          GNOME Control Center account plugin for single signon
+    ....
+在输出结果中的第二列即为所软件包的名称，如果你记得所要卸载软件包的部分名称，可以使用**`grep`**来帮助你查找软件包名程，例如假设我想要卸载**firefox**浏览器,可以这样来做:  
+
+    $ dpkg --list | grep -E '*.firefox*.'
+    ii  firefox                                                     41.0+build3-0ubuntu0.14.04.1                        i386         Safe and easy web browser from Mozilla
+    ii  firefox-locale-en                                           41.0+build3-0ubuntu0.14.04.1                        i386         English language pack for Firefox
+    ii  firefox-locale-zh-hans                                      41.0+build3-0ubuntu0.14.04.1                        i386         Simplified Chinese language pack for Firefox
+    ii  unity-scope-firefoxbookmarks                                0.1+13.10.20130809.1-0ubuntu1                       all          Firefox bookmarks scope for Unity
+    ii  xul-ext-webaccounts                                         0.5-0ubuntu2.14.04.1                                i386         Ubuntu Online Accounts extension for firefox
+这样会将所有包含**firefox**的软件包都输出来。  
+在查找到软件包的名称后，就可以使用命令行来卸载软件了，还是以卸载**firefox**为例:  
+
+    $ sudo apt-get --purge remove firefox
+**`--purge`**参数表示连同该软件的配置文件一起删除，如果不使用该参数，**firefox**的配置文件依然会留在你的主机上，这样你下次再安装**firefox**的时候，还会使用这个配置文件.  
+##软件依赖所导致的问题
+&nbsp;&nbsp;&nbsp;在Linux安装程序的时候，常常会遇到依赖问题，即要安装软件A，必须要首先安装B，就称为软件A依赖软件B，在Ubuntu中安装软件时，**`apt-get`**会自动解决软件依赖问题,但是当卸载软件A时，软件B就不再使用了，但是软件B会依然存留在你的主机中，如果想要删除所有不再使用的软件包，可以执行如下命令:  
+
+    $ sudo apt-get autoremove
+也可以在卸载软件的同时执行这个命令，如下:  
+    $ sudo apt-get purge --auto-remove firefox
+##删除已安装软件的软件包
+&nbsp;&nbsp;&nbsp;在Ubuntu中，当你使用**apt-get`**安装一个软件时，**`apt-get`**会首先将所需的软件包下载到**`/var/cache/apt/archives/`**目录下，之后再进行安装，如果的磁盘空间并不大，可以删除这个目录下的软件包，执行该操作的命令如下:  
+
+    $ sudo apt-get clean
+这样做的缺点是**当你想要重新安装某个软件时，你就必须要重新下载了**.    
+**`apt-get`**是一个很方便的工具，使用它来下载、安装、更新、卸载软件都特别容易，**`apt-get`**的用法还有很多，你可以在终端输入**`apt-get`**来获取更多的信息. <br /><br />  
+一如既往，如果你对文章中的内容有任何疑问，或者是发现文章中有任何错误，都可以通过下面的地址发邮件告诉我.  
+E-mail: rytubuntulinux@gmail.com <br /><br />   

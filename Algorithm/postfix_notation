@@ -1,0 +1,59 @@
+#Reverse Polish Notation
+2015-10-02 <br />  
+在程序设计领域，有一个概念叫做**Reverse Polish Notation(RPN)**,它在进行数学计算时，将操作数放在前边，而将操作符放在操作数的后面，来看一个例子:  
+
+>9 3 +   &nbsp;&nbsp;&nbsp;相当于9+3  
+>9 3 /   &nbsp;&nbsp;&nbsp;相当于9/3  
+>9 3 *   &nbsp;&nbsp;&nbsp;相当于9*3  
+>9 3 %   &nbsp;&nbsp;&nbsp;相当于9%3  
+
+&nbsp;&nbsp;&nbsp;**Reverse Polish Notation**在计算机科学领域应用很广泛，例如，在计算机中通常就是将**`9+3`**这样形式的运算首先转换为**`9 3 +`**这样的形式之后在进行计算，关于**Reverse Polish Notation**的更多应用，可以查看[维基百科](https://en.wikipedia.org/wiki/Reverse_Polish_notation).本文将讨论如何对**Reverse Polish Notation**形式的表达式进行计算。    
+一个简单的计算**RPN**表达式的方法就是使用栈来实现，具体的算法如下:  
+
+- 遍历表达式中所有的标记(包括操作数和操作符)  
+- 如果遇到的标记是一个操作数，则将该操作数压入栈中
+- 如果遇到的标记是一个操作符,则从栈中弹出两个操作数(如果是一元操作符，就弹出一个操作数)，并将该操作符应用于弹出的操作数上，所得结果再压入栈中
+- 当表达式中所有的标记都处理完后，栈中所剩的一个数值即为表达式的计算结果
+
+例如表达式  
+
+    9 3 + 5 * 6 +
+可以表示为  
+
+    (9 + 3) * 5 + 6
+下面是我用Python对这个算法的具体实现:
+
+    import math
+    operators = ['*','/','+','-','%']
+    stack = []
+    input_ = input().split()
+    for elem in input_:
+    	if elem in operators:    #elem is a operator
+    		first_num = stack.pop()
+    		first_num = int(first_num)
+    		second_num = stack.pop()
+    		second_num = int(second_num)
+    		if elem == '*':
+    			result = second_num * first_num
+    		elif elem == '/':
+    			result = second_num / first_num
+    		elif elem == '+':
+    			result = second_num + first_num
+    		elif elem == '-':
+    			result = second_num - first_num
+    		else:
+    			result = second_num % first_num
+    		stack.append(result)
+    	else:               # elem is a operand
+    		stack.append(elem)
+    ans = stack.pop()
+    print(ans)
+上述代码保存在`test.py`文件中，下面来测试一下:  
+
+    $ python test.py
+    9 3 + 5 * 6 +
+    66
+程序运行正常。<br /><br />  
+一如既往，如果你对文章中的内容有任何疑问，或者是发现文章中有任何错误，都可以通过下面的地址发邮件告诉我.  
+E-mail: rytubuntulinux@gmail.com <br /><br />   
+

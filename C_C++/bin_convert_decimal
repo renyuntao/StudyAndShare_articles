@@ -1,0 +1,26 @@
+#C++:如何将一个二进制数转换为十进制数?
+2015-09-16  
+  
+&nbsp;&nbsp;&nbsp;在Python中可以直接使用int内置函数来将一个二进制数转换为十进制数，但是在C++中没有这样的函数，就需要自己动手来完成这个任务了，给定一个二进制数bin，可以这样来将它转换为十进制数:首先取出这个二进制数的最后一位，将这个数乘以1(2的0次幂)并保存结果;之后取出二进制数的倒数第二位,将其乘以2(2的1次幂)并保存结果....重复这个过程，直到将二进制中的数依次取完，将所有这些结果相加即可得到相应的十进制数。  
+示例如下:    
+
+    #include<iostream>
+    using std::cin;
+    using std::cout;
+    using std::endl;
+    int main(int argc,char **argv)
+    {
+    	int bin=0,decimal=0,base=1;
+    	cout<<"Enter the bin number:";
+    	cin>>bin;
+    	while(bin>0)
+    	{
+    		decimal += (bin%10)*base;
+    		base *= 2;
+    		bin /= 10;
+    	}
+    	cout<<"Convert to decimal:"<<decimal<<endl;
+    	return 0;
+    }
+一如既往，如果你对文章中的内容有任何疑问，或者是发现文章中有任何错误，都可以通过下面的地址发邮件告诉我.  
+E-mail: rytubuntulinux@gmail.com

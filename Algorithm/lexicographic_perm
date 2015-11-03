@@ -1,0 +1,43 @@
+#生成基于字典顺序的排列
+2015-10-03<br />  
+&nbsp;&nbsp;&nbsp;在C++标准库中的`prev_permutation()`和`next_permutation()`可以用于生成基于字典顺序的排列(**Lexicographic Permutation**),但是如何自己来实现一个能够生成基于字典顺序的排列呢?本文将讨论这个问题.    
+要对一组序列生成基于字典顺序的排列，可以一个排列一个排列的生成，即每次都寻找当前序列的下一个排列，现在假定序列保存在一个数组a中，寻找当前序列的下一个排列的算法如下:
+
+1. 寻找序列中满足条件**a[k] < a[k+1]**的最大索引**k**;如果不存在这样的索引k，则表明当前的序列即为最后一个排列.
+2. 寻找序列中满足条件**a[l] > a[k]**的最大索引**l**.
+3. 交换**a[k]**和**a[l]**的值
+4. 逆转从**a[k+1]**到数组的最后一个元素**a[n]**之间的所有元素(包括**a[k+1]**和**a[n]**)
+
+下面以序列[1,2,3,4]来举一个例子:  
+
+1. 索引**k=2**,即3所在的位置，因为这个序列中4是唯一一个大于3的元素
+2. 索引**l=3**,即4所在的位置，因为4这个元素是这个序列中索引值最大的,并且它大于3
+3. 交换3和4的值，所得新的序列为[1,2,4,3]
+4. 逆转从**a[k+1]**到最后一个元素之间的所有元素，但是这个例子中，包含在该区间的只有3这一个元素，所以就不用改变。因此序列[1,2,3,4]的下一个排列就是[1,2,4,3]  
+
+下面是我用Python对这个算法的具体实现:
+
+    def next_perm(arr,length):    #arr为当前序列，length为序列的长度
+		k,l = -1,-1
+    	for i in range(length-2,-1,-1):
+    		if arr[i] < arr[i+1]:
+    			k = i
+    			break
+		if k == -1:
+			print('No next permutation!')    #当前序列为最后一个排列
+			return 
+    	for i in range(length-1,-1,-1):
+    		if arr[i] > arr[k]:
+    			l = i
+    			break
+    	temp = arr[l]
+    	arr[l] = arr[k]
+    	arr[k] = temp
+    	unchange_part = arr[:k+1]
+    	reverse_part = list(reversed(arr[k+1:]))
+    	arr = unchange_part + reverse_part
+    	print(arr)        #输出当前序列的下一个排列
+<br />   
+一如既往，如果你对文章中的内容有任何疑问，或者是发现文章中有任何错误，都可以通过下面的地址发邮件告诉我.  
+E-mail: rytubuntulinux@gmail.com  <br /><br />   
+

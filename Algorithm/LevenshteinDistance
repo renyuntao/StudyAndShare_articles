@@ -1,0 +1,36 @@
+#Levenshtein Distance
+2015-09-28<br /><br />
+&nbsp;&nbsp;&nbsp;在一些字处理软件中或有一个单词提示的功能，比如说你想要输入`apple`这个单词，但是由于拼写错误，你输入了`aple`,这时一些子处理软件会提示你输入`apple`这个单词。实现这个功能，其实是用到了`Levenshtein Distance`,这个概念是由Vladimir Levenshtein在1965年提出的，它描述的是将一个字符串转换为另一个字符串所需更改的字符数目的**最小值**，下面来举个例子:
+
+>PLAN  ===>  PLAIN   &nbsp;&nbsp;&nbsp;增加了一个字符'I',Levenshtein Distance:1  
+>THREE  ===>  TREE    &nbsp;&nbsp;&nbsp;移除了一个字符'H',Levenshtein Distance:1  
+>WOMAN  ===>  WOMEN   &nbsp;&nbsp;&nbsp;替换了一个字符,Levenshtein Distance:1  
+>GOOGLE  ===>  GOGLO   &nbsp;&nbsp;&nbsp;Levenshtein Distance:2  
+
+&nbsp;&nbsp;&nbsp;从上面的例子可以看出，如果两个字符串中某两个对应字符如果不匹配的话,只可能是进行了三种操作:插入了一个字符、移除了一个字符、替换了一个字符,且`Levenshtein Distance`要求的是两个字符串之间差异的最小值，因此要计算两个字符串之间的`Levenshtein Distance`,要遵循的一个原则就是:**对两个字符串中的不匹配的字符，将其按照插入、移除、替换三种情况都执行一遍，之后取三种情况中的最小值.**按照这种原则，下面是我用Python的一个具体实现:  
+
+    def LevenshteinDistance(s,t):   #要进行比较的两个字符串s,t
+    	m,n = len(s),len(t)        #m,n分别为字符串s,t的长度 
+    	#创建一个二维数组d,d[i][j]表示字符串s的前i位与字符串t的前j位之间的Leventeish Distance
+    	#注意二维数组的元素个数是(m+1)*(n+1)
+    	d = [[0 for j in range(n+1)] for i in range(m+1)]  
+    	for i in range(1,m+1):
+    		d[i][0] = i
+    	for j in range(1,n+1):
+    		d[0][j] = j
+    	for i in range(1,m+1):
+    		for j in range(1,n+1):
+    			if s[i-1] == t[j-1]:
+    				d[i][j] = d[i-1][j-1]
+    			else:
+    				d[i][j] = min(d[i-1][j]+1,  #t delete a char
+    							d[i][j-1]+1,    #t insert a char
+    							d[i-1][j-1]+1)  #t substitute a char
+    	return d[m][n]
+下面是一个使用上述程序逻辑计算Levenshtein Distance的一个例子:  
+![LevenshteinDistance](http://i13.tietuku.com/e0f0964150c26753.png)  
+在上面的表中，右下角的元素值即为所要求的Levenshtein Distance,也即是说字符串`sitting`与字符串`kitten`之间的Leventeish Distance为3.  
+在[维基百科](https://en.wikipedia.org/wiki/Levenshtein_distance)上还有另外两种计算Levenshtein Distance的方法，感兴趣的话可以自己查看。  
+<br /><br />
+一如既往，如果你对文章中的内容有任何疑问，或者是发现文章中有任何错误，都可以通过下面的地址发邮件告诉我。  
+E-mail: rytubuntulinux@gmail.com <br /><br /><br /> 

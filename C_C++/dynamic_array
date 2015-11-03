@@ -1,0 +1,43 @@
+#C:动态创建二维数组
+2015-09-12  
+&nbsp;&nbsp;&nbsp;有的时候，我们需要创建一个二维数组，并且在程序运行前并不知道数组的行数和列数，此时动态创建二维数组就很重要了。而动态创建二维数组又可分为两种情况，一种是创建的二维数组的内存可能不是连续分布的，而另一中则可以保证创建的二维数组的内存是连续分布的，下面一一介绍。
+##分配可能不连续的内存
+创建这种二维数组的特点是:先分配"外层"数组，然后再分别用malloc语句为每一行分配。
+示例如下:
+```int i,j;  
+const int rows = 5;  
+const int columns = 5;  
+int **matrix = (int**)malloc(sizeof(int*)*rows);  
+for(i=0;i<rows;++i)  
+{  
+	matrix[i] = (int*)malloc(sizeof(int)*columns);  
+}```  
+这种情况下，分配的内存可能连续，也可能不连续。  
+**********
+##分配连续的内存
+分配连续内存的方法还可以分为两种:一种是使用二级指针，另一种是使用一级指针。
+###使用二级指针
+示例如下:  
+`int i,j;  
+const int rows = 5;  
+const int columns = 5;  
+int **matrix = (int**)malloc(sizeof(int*)*rows);  
+matrix[0] = (int*)malloc(sizeof(int)*rows*columns);  
+for(i=1;i<rows;++i)  
+	matrix[i] = matrix[0]+i*columns;`  
+###使用一级指针
+示例如下:  
+`int i,j;  
+const int rows = 5;  
+const int columns = 5;  
+int *matrix = (int*)malloc(sizeof(int)*rows*columns);`  <br><br>  
+&nbsp;&nbsp;总结:由上面的例子可以看出，分配的内存是否一定连续取决于为数组数据分配内存是是否只使用了一个malloc(),如果使用了多个malloc(),则分配的内存不能保证  
+连续;反之，如果只使用了一次malloc(),则可以保证内存是连续的。
+  
+    
+一如既往，如果你对文章中的内容有任何疑问，或者是发现文章中有任何错误，都可以通过下面的地址发邮件告诉我.  
+E-mail: rytubuntulinux@gmail.com  <br><br><br>
+
+  
+    
+

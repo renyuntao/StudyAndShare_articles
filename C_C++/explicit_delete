@@ -1,0 +1,86 @@
+#C++:explicit与=delete
+2015-09-20  <br /><br />
+`=delete`是C++11中的新增特性，它与C++中的关键字`explicit`有些相似，这两者很容易产生混淆，因此，今天便对二者仔细区分了一下，并做了总结如下。
+##explicit
+在C++中有这样一种情况:  
+>在一个需要类对象的地方，却传递了一个某个数据类型的值，恰巧的是，所需对象的对应类恰好有一个包含该类型参数的单参构造函数，此时，编译器就会将这个数值传递给这个单参的构造函数，从而构造出一个所需的类对象。  
+
+下面来看一个例子:  
+ 
+    #include<iostream>
+    using namespace std;
+    class Test
+    {
+    	public:
+    		Test(int i):a(i){}
+    		void Get()
+    		{
+    			cout<<"a:"<<a<<endl;
+    		}
+    	private:
+    		int a;
+    };
+    void foo(Test test)
+    {
+    	test.Get();
+    }
+    int main()
+    {
+    	Test t = 123;
+    	t.Get();
+    	foo(100);
+    	return 0;
+    }
+假设上面的程序保存在`test.cxx`文件中:
+
+    $ g++ test.cxx && ./a.out
+    a:123
+    a:100
+&nbsp;&nbsp;&nbsp;上面程序中的**`Test t = 123`**和**`foo(100)`**都是用到了上面描述的情况，编译器将数值`123`和`100`分别传递给`Test`类的单参构造函数，从而产生所需的类对象,这种行为被称作`隐式构造`;但是，有时候，我们并不想要编译器来做这种自动调用构造函数的行为，这时就是关键字`explicit`派上用场的时候了，只要在`Test`类的构造函数前面加上`explicit`关键字，即**`explicit Test(int i):a(i) {}`**,就可以抑制编译器的这种行为。  
+##=delete
+`=delete`是C++11中新增的关键字，它可以用来避免编译器做一些不必要的隐式数据类型转换。  
+来看下面的例子: 
+
+    #include<iostream>
+    using namespace std;
+    class Test
+    {
+    	public:
+    		Test(int i):a(i){}
+    		//Test(char c) = delete;
+    		void Get()
+    		{
+    			cout<<"a:"<<a<<endl;
+    		}
+    	private:
+    		int a;
+    };
+    int main()
+    {
+    	Test a(123);
+    	a.Get();
+    	Test b('A');
+    	b.Get();
+    	return 0;
+    }
+假设上面的程序保存在`test.cxx`文件中:
+
+    $ g++ test.cxx && ./a.out
+    a:123
+    a:65
+&nbsp;&nbsp;&nbsp;上面程序中的`Test b('A');`语句，编译器会将字符`A`隐式转换为`int`类型，而字符`A`的ASCII码值为65,因此程序输出`a:65`，而这种情况多数情况下不是我们想要的，此时就可以使用`=delete`来抑制编译器的这种隐式类型转换，即只要将上述程序中`Test(char c) = delete;`语句前面的注释去掉即可，之后像`Test b('A')`这样的用法就不会编译通过了,这样一来，我们就可以对一些危险的、不应该发生的隐式类型转换进行适当的控制。   
+**补充:`=delete`并不局限于类成员函数上，它也可以用在一些普通的函数上,比如下面的例子:**
+
+    void func(int a) {}
+    void func(char c) = delete;
+    int main()
+    {
+    	func(3);
+    	func('A');   //编译不能通过
+    	return 0;
+    }
+<br />
+
+
+一如既往,如果你对文章中的内容有任何疑问，或者是发现文章中有任何错误，都可以通过下面的地址发邮件告诉我.  
+E-mail: rytubuntulinux@gmail.com<br /><br /><br />

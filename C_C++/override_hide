@@ -1,0 +1,79 @@
+#C++:隐藏 VS 覆盖
+2015-09-25<br /><br />
+在C++中，隐藏(Hide)和覆盖(Override)的差异十分细小，致使经常对这两个概念混淆。这篇文章将通过几个例子来说明隐藏(Hide)和覆写(Override)的特性，借此来区分隐藏和覆写。  
+##覆写(Override)
+&nbsp;&nbsp;&nbsp;设想这样一种情况:一个派生类创建了一个成员函数`Foo`，该函数的名称、参数即返回类型同父类中的某个函数`Foo`完全相同(也就是派生类创建的函数的**signature**与其父类中的某个函数完全相同),但是函数的实现却与其父类不同.此时就可以说派生类中的`Foo`函数覆写了父类中的`Foo`函数。这种情况下，但我们使用派生类对象调用`Foo`函数时，将会自动调用派生类实现的那个`Foo`函数(*很多时候，在这种情况下，父类中的`Foo`函数会被声明为**`virtual`**.*),下面来看一个例子:  
+
+    #include<iostream>
+    using namespace std;
+    class Father
+    {
+    	public:
+    		void foo()
+    		{
+    			cout<<"In father...\n";
+    		}
+    };
+    class Son:public Father
+    {
+    	public:
+    		void foo()
+    		{
+    			cout<<"In son..."<<endl;
+    		}
+    };
+    int main()
+    {
+    	Son son;
+    	son.p();
+    	son.Father::p();     //显示调用父类中的p()
+    	return 0;
+    }
+上面程序的输出结果如下:  
+
+    In son...
+    In fahter...
+&nbsp;&nbsp;&nbsp;**当父类的函数在子类中被覆盖后，子类中就不再存在父类实现的那个函数了，此时，如果想要调用父类实现的那个被覆盖的函数，只能通过`ClassName::func()`的形式来调用了，就像上面程序中`son.Father::p();`语句一样.**
+##隐藏(Hide)
+&nbsp;&nbsp;&nbsp;再次设想一种情况:一个派生类创建了一个成员函数`Foo`,该函数的名称与父类中的一个函数同名，但是，派生类的`Foo`函数和父类中的`Foo`函数的**signature**并不相同，也就是说这两个函数的返回值或者参数类型并不相同。此时父类中的`Foo`函数就被隐藏了。这种情况下，派生类对象只能调用新创键的`Foo`函数，而不能直接调用父类中的`Foo`函数，示例如下:
+
+    #include<iostream>
+    using namespace std;
+    class Father
+    {
+    	public:
+    		void foo()
+    		{
+    			cout<<"In father...\n";
+    		}
+    };
+    class Son:public Father
+    {
+    	public:
+    		void foo(int i)
+    		{
+    			cout<<"In son,i:"<<i<<endl;
+    		}
+    };
+    int main()
+    {
+    	Son son;
+    	son.p();     //编译错误
+    	son.p(100);   //输出: In son,i:100
+    	return 0;
+    }
+如果想要调用父类中的`foo`函数，可以在派生类中添加语句:`using Father::foo;`,如下:
+
+    class Son:public Father
+    {
+    	public:
+    		using Father::foo;   //注意要将该语句写在public中
+    		void foo(int i)
+    		{
+    			cout<<"In son,i:"<<i<<endl;
+    		}
+    };
+&nbsp;&nbsp;&nbsp;此时再在main函数中执行语句`son.p();`编译通过了，该语句调用的是父类中的`foo()`函数，**这说明父类中的函数在子类中被隐藏后，实际上是依然存在的(这与覆盖不同),只是派生类不能直接存在，需要使用`using Father::foo;`语句来显示激活父类中的`foo()`函数.**   
+除了使用`using Father::foo;`语句来是派生类可以调用父类被隐藏的函数外，还可以像覆盖中那样，使用`son.Father::foo();`语句来显示调用父类中的`foo()`函数.  <br /><br /><br />
+一如既往，如果你对文章中的内容有任何疑问，或者是发现文章中有任何错误，都可以通过下面的地址发邮件告诉我。  
+E-mail: rytubuntulinux@gmail.com  <br /><br /><br />

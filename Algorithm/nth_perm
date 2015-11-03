@@ -1,0 +1,43 @@
+#寻找第N个排列
+2015-10-04 <br />     
+&nbsp;&nbsp;&nbsp;之前我在[生成基于字典顺序的排列](http://www.studyandshare.info/lexicographic_perm.html)一文中讨论了如何生成基于字典顺序的下一个排列，那种方法在生成一个序列的排列时，只能一个排列一个排列的生成，每一个排列(除了第一个外)的生成都要依赖与上一个排列,这样的话就产生了一个问题，即如果我只想要得到一个序列的第**N**个排列时，就必须先生成该序列的前**N-1**个序列,当**N**比较小时，这个做倒没什么问题，但是当**N**很大的时候，这样做效率就太低了,比如下面这个序列:
+
+>ABCDEFGHIJKL
+
+&nbsp;&nbsp;&nbsp;该序列共有12个字符，因此该序列的排列总数为**`12! = 479001600`**,我想要得第**10531100**个排列,如果按照之前的方法，就要先求得前**10531099**个排列，之后再根据第**10531099**个排列来求得第**10531100**个排列，但是如果你按照这个方法写个程序来运行一下的话，就会发现程序将运行很长时间，因此按照这种方法来解决该问题效率是很低下的.    
+现在假设序列保存在数组**arr**中，为了解决上述问题，本文将介绍另外一种算法，如下:  
+
+1. 定义变量**`e`**,用它来保存序列的长度
+2. 定义变量**`n`**,用它来保存要求第几个排列,创建空数组**answer**
+3. 计算**`division = (e!) / e`**,这里**e!**表示**e**的阶乘
+4. 计算**`pos = ceil(n/division)`**
+5. 寻找数组**arr**的第**pos-1**个元素,并将其添加到数组**`answer`**末尾
+6. 计算**`e = e -1`**
+7. 从数组**arr**中移除第**pos-1**个元素，并重新调整数组
+8. **`oldDivision = division`** 
+9. 计算**`n = n-(oldDivision*(pos-1))`**
+10. 如果数组**arr**不为空，转至第3步
+11. 输出数组**answer**中的内容
+
+这个算法是我从某个博客上看到的，详细介绍可以查看[这里](http://nrecursions.blogspot.sg/2014/02/nth-permutation-without-swapping.html).  
+下面是我用Python对这个算法的实现:
+
+    import math
+    def Nth_Perm(nth,num,arr):
+    	n = nth
+    	e = num
+    	temp = []
+    	while len(arr) != 0:
+    		division = math.factorial(e)/e
+    		pos = math.ceil(n/division)
+    		t = arr[pos-1]
+    		temp.append(t)
+    		e = e - 1
+    		arr.remove(t)
+    		oldDivision = division
+    		n = n - (oldDivision*(pos-1))
+    	ans.append(''.join(temp))
+<br />  
+一如既往，如果你对文章中的内容有任何疑问，或者是发现文章中有任何错误，都可以通过下面的地址发邮件告诉我.   
+E-mail: rytubuntulinux@gmail.com  <br /><br />  
+

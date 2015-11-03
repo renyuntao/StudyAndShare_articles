@@ -1,0 +1,70 @@
+#C/C++:如何将一个十进制数转换为一个二进制数?
+2015-09-17<br />     
+&nbsp;&nbsp;&nbsp;C/C++中没有像Python中`bin()`这样的函数，所以要将一个十进制数转换为一个二进制数只能自己编写代码来完成，不过在C++中有一些捷径，比如`bitset`类可以使这种转换工作变得简单一些，而在C语言中，就要完全靠自己来编写代码来完成这个转换工作了。  
+##C风格的转换操作  
+C语言中，完全要靠自己来编写代码来完成从十进制到二进制的转换工作，下面是我写的C代码:
+
+    #include<stdio.h>
+    int main()
+    {
+    	char bin[20];
+    	int decimal;
+    	int count = 0,i;
+    	printf("Enter a decimal number:");
+    	scanf("%d",&decimal);
+    	while(decimal != 0)
+    	{
+    		bin[count] = decimal % 2;
+    		decimal /= 2;
+    		++count;
+    	}
+    	--count;
+    	printf("Convert to binary:");
+    	for(i=count;i>=0;--i)
+    	{
+    		printf("%d",bin[i]);
+    	}
+    	printf("\n");
+    	return 0;
+    }
+假设上述代码保存在test.c文件中，下面是测试结果:
+
+    $ gcc test.c && ./a.out
+    Enter a decimal number:10
+    Convert to binary:1010
+*********************
+##C++风格的转换操作
+&nbsp;&nbsp;&nbsp;在C++中，有一个`bitset`类可以使从十进制到二进制(或者是二进制到十进制)的转换操作简单一些，这个类位于`<bitset>`头文件中，因为这个类可以方便的将一个十进制数转换为二进制数，或者是将一个二进制数转换为一个十进制数，因此下面的示例给出二进制与十进制数相互转换的例子:  
+
+    #include<iostream>
+    #include<bitset>
+    #include<string>
+    using std::string;
+    using std::endl;
+    using std::cout;
+    using std::cin;
+    using std::bitset;
+    int main()
+    {
+    	/******** Convert decimal to binary *********/
+    	int decimal;
+    	cout<<"Enter a decimal number:";
+    	cin>>decimal;
+    	string bin = bitset<8>(decimal).to_string();
+    	cout<<"Convert to binary:"<<bin<<endl;
+    	/******* Convert binary to decimal *********/
+    	cout<<"Enter a binary number:";
+    	cin>>bin;
+    	cout<<"Convert to decimal:"<<bitset<8>(bin).to_ulong()<<endl;
+    	return 0;
+    }
+假设上述代码保存在test.cxx文件中，下面是测试结果:  
+
+    $ g++ test.cxx && ./a.out
+    Enter a decimal number:10
+    Convert to binary:00001010
+    Enter a binary number:1010
+    Convert to decimal:10
+&nbsp;&nbsp;&nbsp;_**总结:从上面的例子可以看出，无论是C风格的转换操作，还是C++风格的转换操作，当将一个十进制数转换为二进制数时，都是十进制数转换为一个二进制数值字符串来作为转换结果;而当将一个二进制数转换为十进制数时，也是将一个二进制的数值字符串转换为十进制数.**_  <br /><br />  
+一如既往，如果你对文章中的内容有任何疑问，或者是发现文章中有任何错误，都可以通过下面的地址发邮件告诉我。  
+E-mail: rytubuntulinux@gmail.com<br /><br /><br />

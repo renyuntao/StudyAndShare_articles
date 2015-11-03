@@ -1,0 +1,75 @@
+#C/C++:十进制与十六进制之间的转换
+2015-09-17  <br /><br />
+&nbsp;&nbsp;&nbsp;在C/C++中没有像Python中的`int()`,`hex()`这样的函数，可以将十进制转换为十六进制，或者是将十六进制转换为十进制，要完成这个任务，就要自己编写代码来做。下面来介绍如何在C或者C++中来完成十进制和十六进制之间的转换工作。  
+##C风格的转换操作
+使用C语言来完成这个任务，将十进制数转换为十六进制数时使用`sprinf()`，而将十六进制数转换为十进制数时使用`strtol()`,示例如下:
+
+    #include<stdio.h>
+    #include<stdlib.h>
+    int main()
+    {
+    	/****** Convert decimal to hex ********/
+    	int a;
+    	printf("Enter a decimal number:");
+    	scanf("%d",&a);
+    	char ch[10]={0,};
+    	sprintf(ch,"%X",a);
+    	printf("Convert to hex:%s\n",ch);
+    	/****** Convert hex to decimal ********/
+    	char hex[10] = {0,};
+    	long int decimal;
+    	printf("Enter a hex number:");
+    	scanf("%s",hex);
+    	decimal = strtol(hex,NULL,16);
+    	printf("Convert to decimal:%ld\n",decimal);
+    	return 0;
+    }
+假设上面的程序保存在test.c文件中，下面来测试这个程序:  
+
+    $ gcc test.c && ./a.out  
+    Enter a decimal number: 30  
+    Convert to hex: 1E  
+    Enter a hex number: 1E  
+    Convert to decimal: 30  
+##C++风格的转换操作
+使用C++来完成这个任务，将十进制数转换为十六进制数，和将十六进制数转换为十进制数，都是使用`stringstream`类来完成，这个类包含来`<sstream>`头文件中.
+
+    #include<iostream>
+    #include<sstream>
+    #include<string>
+    using std::cin;
+    using std::endl;
+    using std::cout;
+    using std::string;
+    using std::stringstream;
+    using std::hex;
+    int main()
+    {
+    	/********Convert hex to decimal***********/
+    	int decimal;
+    	string str;
+    	stringstream ss;
+    	cout<<"Enter a hex number:";
+    	cin>>str;
+    	ss.str(str);
+    	ss>>hex>>decimal;
+    	cout<<"Convert to decimal:"<<decimal<<endl;
+    	/********Convert decimal to hex*********/
+    	cout<<"Enter a decimal number:";
+    	cin>>decimal;
+    	ss<<hex<<decimal;
+    	cout<<"Convert to hex:"<<ss.str()<<endl;
+    	return 0;
+    }
+假设上面的程序保存在test.cxx文件中,下面来测试这个程序:
+
+    $ g++ test.cxx && ./a.out
+    Enter a hex number: 1E
+    Convert to decimal: 30
+    Enter a decimal number: 30
+    Convert to hex: 1E
+	  
+	    
+&nbsp;&nbsp;&nbsp;_**总结:无论是C风格的转换，还是C++风格的转换，在将十进制数转换为十六进制数时，都是将十进制数转换为一个十六进制的数值字符串;而在做十六进制向十进制的转换时，也都是将一个十六进制的数值字符串转换为十进制数。**_  <br /><br />
+一如既往，如果你对文章中的内容有任何疑问，或者是发现文章中有任何错误，都可以通过下面的地址发邮件给我。  
+E-mail: rytubuntulinux@gmail.com  

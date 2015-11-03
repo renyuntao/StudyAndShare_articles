@@ -1,0 +1,39 @@
+#C:如何编写没有main函数的程序?
+2015-09-30<br /><br />
+&nbsp;&nbsp;&nbsp;我们平时所写的C程序都是有一个`main()`函数，当程序执行时，都是从`main()`开始执行，但是能不能写一个没有`main()`的C程序呢?答案只能说是形式上可以编写一个没有`main()`的C程序，关于原因将在文章最后说明，下面先来看看如何编写一个没有`main()`的C程序。  
+##使用宏(macro)来实现
+&nbsp;&nbsp;&nbsp;要编写一个没有`main()`的C程序，可以简单的用宏来实现，即使用`#define name con_value`语句，定义宏其实就是在定义一个常量，上述语句中的`con_value`即为要定一个的常量值，`name`即为常量的名字，程序在被编译之前，会首先经过预处理器的预处理过程，该过程就包括将程序中所有出现`name`的地方用`con_value`来替换掉，根据这个原理，我们可以通过宏来编写一个没有`main()`的C程序，如下:
+
+    #include<stdio.h>
+    #define begin main
+    int begin()
+    {
+    	printf("C program without main!\n");
+    	return 0;
+    }
+上面的程序在预处理过程中，`begin`会被`main`所替换，从而使得程序可以正常运行。  
+##使用宏和\##符号来实现
+下面的程序也没有`main()`,但是要更难理解一些.  
+
+    #include<stdio.h>
+    #define begin m##a##i##n
+    int begin()
+    {
+    	printf("C program without main!\n");
+    	return 0;
+    }
+这个程序依旧可以征程运行，在这个程序中，起关键作用的就是宏和`##`符号，`##`在C中有着特殊的含义，它可以起连接的作用，示例如下:  
+
+    #include<stdio.h>
+    #define join(x,y) x##y
+    int main()
+    {
+    	int join(a,b) = 20;
+    	printf("%d\n",ab);
+    	return 0;
+    }
+上面的程序在预处理过程中，`join(a,b)`会被替换为`ab`,之后将变量ab初始化为20.  
+明白了这一点，上面那个没有`main`的C程序就容易理解了，在预处理过程中，同样是将`begin`用`main`替换掉了。   
+由此可见，在C程序中是一定要有`main()`的，上面的程序也都只是形式上没有`main`而已。现在应该可以理解为什么我在文章开头说只能编写一个形式上没有`main`的C程序了.    <br /><br />  
+一如既往，如果你对文章中的内容有任何疑问，或者是发现文章中有任何错误，都可以通过下面的地址发邮件告诉我。  
+E-mail: rytubuntulinux@gmail.com<br /><br /><br />

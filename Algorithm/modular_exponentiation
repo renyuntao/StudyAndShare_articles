@@ -1,0 +1,31 @@
+#模幂运算
+2015-09-23  
+  
+&nbsp;&nbsp;&nbsp;模幂(modular exponentiation)运算即是求解`(A^B)%M`这样的表达式，关于模幂运算的应用可以查看[维基百科](https://en.wikipedia.org/wiki/Modular_exponentiation),本文只讨论如何高效的计算出上述表达式的值。对于上述表达式，当`A`和`B`的数值比较小的时候,可以直接计算出`A^B`的值，之后再让这个值`mod M`即可，但是当A，B特别大的时候，比如`A = 864927518`,`B = 1462579282`,此时要直接计算出`A^B`效率是很低下的。为了解决这个问题，有一种十分高效的解决方法如下.  
+首先介绍一个之后会用到的模幂运算的性质:`(A*B)%M = ((A%M)*(B%M))%M`  
+对于一个模幂运算`(b^e)%m`,可以将e转换为一个二进制串,如下所示:    
+![modexp1](http://i3.tietuku.com/2e94740043d25d66.png)  
+上述表达式中，e有n位，ai可以是0或者1。之后`b^e`可以写作:  
+![modexp2](http://i3.tietuku.com/78ea0952ec24df68.png)     
+则模幂运算`(b^e)%m`的结果可以写为:    
+![modexp3](http://i3.tietuku.com/76e5f90748f5c521.png)  
+下面来举一个例子,加入要求解`(4^13)%m`的值，按照上述方法，先将13转换为二进制串，即为`1101`,则`(4^13)%m`可以写作`[(4^1)*1*(4^4)*(4^8)]%m`,之后定义一个变量`c`,并按照`(A*B)%M = ((A%M)*(B%M))%M`的性质，进行如下运算:  
+
+    c = {(1%m)*[(4^1)%m]}%m = c1
+    c = {c1*[(4^4)%m]}%m = c2
+    c = {c2*[(4^8)%m]}%m = c3
+最终所得c即为模幂运算`(4^13)%m`的结果。
+下面是我使用Python写的具体代码实现:
+
+    def modexp(base,exponent,modulus):
+    	result = 1
+    	base = base % modulus
+    	while exponent > 0:
+    		if exponent % 2 == 1:                   #判断二进制串的最右边的位是否为1
+    			result = (result*base) % modulus    #等号右边的`result`相当于`A%M`
+    		exponent = exponent >> 1                #将`exponent`看作二进制数,此语句二进制串右移一位
+    		base = (base * base) % modulus    #等号右边相当于`B%M`
+    	return result
+<br /><br />  
+一如既往，如果你对文章中的内容有任何疑问，或者是发现文章中有任何错误，都可以通过下面的地址发邮件告诉我.  
+E-mail: rytubuntulinux@gmail.com<br /><br /><br />

@@ -1,0 +1,66 @@
+#Binary Heap
+2015-10-03<br />  
+**Binary Heap**是一种堆数据结构，它由一棵二叉树构成，因此，**binary heap**也可以看作是附加了如下两个条件的二叉树:  
+
+- **binary heap**是一棵完全二叉树
+- **binary heap**可以分为**binary min heap**和**binary max heap**,对于**binary min heap**而言，双亲节点的值要小于等于子节点的值;而对于**binary max heap**而言，双亲结点的值要大于等于子节点的值.  
+
+下面左图为**binary min heap**,右图为**binary max heap**:  
+![binary min heap](http://i11.tietuku.com/0a136ca29c599573.png)
+![binary max heap](http://i11.tietuku.com/931842ab53d668da.png)  
+由上图可知，对于**binary heap**,根结点即为整棵树的最小值或最大值.  
+下面的讨论将以**binary min heap**为例。  
+##Binary Heap的实现
+通常情况下，**Binary Heap**使用数组来实现。**任何二叉树都可以使用数组来实现**，并且**binary heap**是一个完全二叉树,因此使用数组来实现会更加简洁.  
+###插入操作
+&nbsp;&nbsp;&nbsp;当要插入一个元素时，会首先将这个元素放到数组的末尾，之后再将这个元素的值与其双亲节点的值进行比较，如果这个元素比其双亲节点的值大，则该元素当前所处的位置已经是正确的位置了，不必再进行移动;如果这个元素的值比其双亲节点的值小，则将这个元素与其双亲结点进行交换,之后再对双亲结点做同样的事，即将双亲节点与爷爷结点进行比较...按照上述规则进行，直至找到正确的位置或到达根结点(根节点没有双亲节点).  
+上述操作需要获知双亲节点的位置，在数组中，假设子节点的索引为**k**，则其双亲结点的索引值为**floor((k-1)/2)**.  
+###移除操作
+&nbsp;&nbsp;&nbsp;在**binary heap**中，移除操作通常是指移除根结点，即移除最大值或最小值，当移除了根节点后，首先要将数组中的最后一个元素移动到根节点的位置,之后将这个节点的值与其子节点的值进行比较，如果小于子节点的值，则该节点的值已处于正确位置，无需移动;如果大于子节点的值，则将该值与子节点中拥有较小的值的节点进行交换，之后再按照上述规则将子节点的值与孙子节点的值进行比较...如此进行直到元素都位于正确位置或再没有子节点可比较为止.  
+上述操作需要获知子节点的位置，在数组中，假设双亲节点的索引为**k**,则其左右子节点的索引分别为**k\*2+1**和**k\*2+2**.  
+##使用Python实现Binary Heap
+下面是我用Python实现的**Binary Heap**,程序接收来自标准输入的输入，如果输入值非0，则表示插入该元素，如果输入是0,则表示移除根元素:  
+
+    import math
+    input_ = [int(num) for num in input().split()]
+    bin_heap = []
+    count = 0
+    for digit in input_:
+    	if digit != 0:
+    		bin_heap.append(digit)
+    		count += 1
+    		child_i = count - 1
+    		parent_i = math.floor((child_i-1)/2)
+    		while True:
+    			if parent_i >= 0:   #exist parent
+    				if bin_heap[parent_i] > bin_heap[child_i]:   #need swap
+    					t = bin_heap[parent_i]
+    					bin_heap[parent_i] = bin_heap[child_i]
+    					bin_heap[child_i] = t
+    					child_i = parent_i
+    					parent_i = math.floor((child_i-1)/2)
+    				else:
+    					break
+    			else:
+    				break
+    	else:    #remove minimum element from bin_heap
+    		bin_heap[0] = bin_heap.pop()
+    		count -= 1
+    		parent_i = 0
+    		p = parent_i
+    		while True:
+    			l_child,r_child = parent_i*2+1,parent_i*2+2
+    			if l_child < count and bin_heap[parent_i] > bin_heap[l_child]:
+    				p = l_child
+    			if r_child < count and bin_heap[p] > bin_heap[r_child]:
+    				p = r_child
+    			if p != parent_i:    #need swap
+    				t = bin_heap[p]
+    				bin_heap[p] = bin_heap[parent_i]
+    				bin_heap[parent_i] = t
+    				parent_i = p
+    			else:
+    				break
+    print(*bin_heap)
+<br /><br />一如既往，如果你对文章中的内容有任何疑问，或者是发现文章中有任何错误，都可以通过下面的地址发邮件告诉我.  
+E-mail: rytubuntulinux@gmail.com<br /><br /><br />

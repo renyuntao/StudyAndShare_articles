@@ -1,0 +1,45 @@
+#C++11新特性:auto类型推导
+2015-09-19  <br /><br />
+&nbsp;&nbsp;&nbsp;在C++11之前，使用auto关键字来修饰一个变量，表示的是这个变量具有自动存储期，但是这个关键字很少使用，因为在函数中，如果一个变量没有声明为static，则这个变量默认就是具有自动存储期的局部变量。因此，在C++11中，auto关键字被赋予了新的含义，即auto被用作一个类型指定符，使用该关键字修饰的变量，其类型在编译阶段有编译器推到得出。  
+下面是一个使用`auto`关键字的例子:
+
+    #include<iostream>
+    #include<typeinfo>
+    int main()
+    {
+    	auto decimal = 10;
+    	std::cout<<"decimal:"<<decimal<<std::endl;
+    	std::cout<<"decimal is:"<<typeid(decimal).name()<<std::endl;
+    	return 0;
+    }
+假设上面的程序保存在test.cxx文件中:  
+
+    $ g++ -std=gnu++11 test.cxx
+    $ ./a.out | c++filt -t
+    decimal: 10
+    decimal is: int
+由上面的输出结果可以看出，decimal被推导为`int`类型。  
+*****************
+##使用auto的注意事项
+- 在使用`auto`声明变量时，必须对变量进行初始化，否则编译时，编译器无法推导出变量的类型，比如**`auto a;`**这样的用法就是错误的。  
+- `auto`声明的普通变量并不能带走初始化表达式的`const`或`volatile`限制符,示例如下:  
+
+        const int a = 1;  
+        auto b = a;    //b is `int` rather than `const int`
+- `auto`声明的引用或者指针变量则可以带走初始化表达式的`const`或`volatile`限制符,示例如下:    
+
+        const int a = 1;  
+        auto &b = a;   //b is const int &  
+        auto *c = &a;   //c is const int *  
+- `auto`可以用来声明多个变量，但这些变量的类型必须一致,比如`auto a=1,b=2.3;`这样的语句就是错误的。  
+*************************
+##不能使用auto的四种情况
+`auto`关键字的使用也是有限制的，在下面是4种不能使用`auto`的情况:  
+
+- `auto`不能作为函数的行参  
+- 对于结构体而言，非静态成员变量的类型不能是`auto`.  
+- 不能使用`auto`声明数组   
+- 实例化模板时，不能将`auto`作为模板参数  
+
+一如既往，如果你对文章中的内容有任何疑问，或者是发现文章中有任何错误，都可以通过下面的地址发邮件告诉我。  
+E-mail: rytubuntulinux@gmail.com <br /><br /><br />
