@@ -1,5 +1,10 @@
 # 一个简单的访问 Google 的方法            
 2015-12-31   <br />           
+             
+**更新:最近DNS 120.27.30.176 似乎不能正常使用，大家可以尝试使用DNS 182.254.158.191。**             
+**再次感谢 [PandaDNS](http://dns.sspanda.com/) ,使得我们可以方便的使用 Google 来学习。           
+                      
+
 &nbsp;&nbsp;&nbsp;通常自己翻墙，操作十分繁杂，需要很多相关的知识。不过这里将要介绍的方法十分简单，只要设置一下 `DNS` ,即可以成功访问 Google.下面我以 Ubuntu 14.04 为例(因为我日常使用的就是这个系统)来介绍如何设置 `DNS` ,至于 Windows 用户，可以参见这篇文章来了解如何设置 `DNS` : [Change TCP/IP settings](http://windows.microsoft.com/en-us/windows/change-tcp-ip-settings#1TC=windows-7),并将 `DNS` 设置为 `120.27.30.176`.                        
 
 Ubuntu 中可以在文件 `/etc/resolv.conf.` 配置 `DNS` ，打开该文件，可以看到类似下面的内容:              
