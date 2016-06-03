@@ -120,6 +120,46 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 ```
 可以看到，GCC 的版本同样变为了 `gcc-6.1`。                 
 
+## 设置 gcc 的默认 man 手册           
+虽然现在 gcc 的默认版本已经是 `gcc-6` 了，但是如果你执行下面的命令:              
+          
+```bash
+$ man gcc
+```
+你会看到 `gcc` 的 man 手册的版本仍然是 `gcc-4.8`,如果你想要看 `gcc-6` 的 man 手册，你需要执行如下命令:            
+         
+```bash
+$ man gcc-6
+```
+然而这样使用起来感觉很不自然，我们想要在运行命令 `man gcc` 时就能看到 `gcc-6` 的 man 手册，下面就来讲解如何将 `gcc-6` 的 man 手册设置为 gcc 的默认 man 手册:              
+        
+1. 首先来查看 `gcc-6` 的 man 手册的位置:              
+
+	```bash
+	$ locate gcc-6 | grep 'man'
+	/usr/share/man/man1/gcc-6.1.gz            
+	/usr/share/man/man1/x86_64-linux-gnu-gcc-6.1.gz
+	```
+	可以看到， `gcc-6`的 man 手册的位置在 `/usr/share/man/man1/gcc-6.1.gz`             
+2. 删除文件 `/usr/share/man/man1/gcc.1.gz`:            
+
+	```bash
+	$ sudo rm /usr/share/man/man1/gcc.1.gz
+	```
+3. 在 `/usr/share/man/man1/` 目录下创建一个符号链接文件 `gcc.1.gz`,并将这链接文件指向同目录下的 `gcc-6.1.gz` 文件:             
+          
+	```bash
+	$ sudo ln -s /usr/share/man/man1/gcc-6.1.gz /usr/share/man/man1/gcc.1.gz
+	```
+4. 以同样的方法为 `g++` 创建符号链接:            
+	
+	```bash
+	$ sudo rm /usr/share/man/man1/g++.1.gz
+	$ sudo ln -s /usr/share/man/man1/gcc-6.1.gz /usr/share/man/man1/g++.1.gz
+	```
+
+之后，当你在运行命令 `man gcc` 时，你就会看到 gcc 的 man 手册的版本变为了最新版的 `gcc-6` 了。      
+
 <!--
 Reference: http://askubuntu.com/questions/26498/choose-gcc-and-g-version
 -->
