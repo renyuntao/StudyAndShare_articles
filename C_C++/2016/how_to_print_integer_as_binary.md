@@ -196,3 +196,9 @@ $ echo "obase=2; $num" | bc
 
 ## 结束语               
 在编写程序时，有时候我们需要将一个十进制整数转换为二进制的格式来输出，而这样的转换往往需要一些技巧（尤其是在C/C++中），这篇文章总结了一些在 **C/C++**, **Python** 和 **Bash Shell** 中将十进制整数转换为二进制格式来输出的方法，如果你需要在程序中需要将一个十进制数转换为二进制来输出，希望这篇文章可以帮助到你。                
+
+<!--
+Reference:            
+[Stack Overflow](https://stackoverflow.com/questions/111928/is-there-a-printf-converter-to-print-in-binary-format?page=1&tab=active#tab-top)      
+[Stack Overflow](https://stackoverflow.com/questions/10278513/bash-shell-decimal-to-binary-conversion)            
+-->
