@@ -94,8 +94,8 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 	```
 2. 在文件末尾添加如下两条语句:               
 
-	> alias gcc='/usr/bin/gcc'    
-	>alias g++='/usr/bin/g++'	
+	> alias gcc='/usr/bin/gcc-6'    
+	>alias g++='/usr/bin/g++-6'	
 
 3. 保存文件并退出
 4. 执行下面的命令进行更新:               
